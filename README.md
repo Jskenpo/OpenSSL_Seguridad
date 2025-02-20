@@ -57,3 +57,18 @@ output
 ```
 ��OĚ%�kT.]s�����b ...
 ```
+
+<b>Conflictos encontrados </b>
+
+El comando openssl rsautl está deprecado:
+
+```
+openssl rsautl -encrypt -inkey clave_publica_destinatario.pem -pubin -in aes_
+key.txt -out aes_key_cifrada.bin
+```
+
+ Sin embargo, ya no se recomienda su uso para cifrado con RSA, ya que no ofrece soporte para opciones modernas como OAEP de forma flexible y segura. En su lugar, se utiliza openssl pkeyutl, que es la alternativa actual y admite configuraciones avanzadas, como el modo de padding OAEP, proporcionando mayor seguridad contra ataques criptográficos.
+
+<b>Lecciones aprendidas </b>
+
+Al trabajar con AES, aprendimos la importancia de usar claves seguras y cómo protegerlas mediante cifrado asimétrico con RSA. Vimos cómo generar una clave AES con OpenSSL, cifrar y descifrar archivos, y asegurar la clave AES utilizando una clave pública RSA con OAEP para mayor seguridad. También entendimos por qué comandos como rsautl están deprecados y cómo pkeyutl ofrece mejores prácticas criptográficas. Estos conceptos son esenciales para proteger datos en aplicaciones del mundo real.
