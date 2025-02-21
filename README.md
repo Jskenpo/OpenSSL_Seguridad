@@ -6,7 +6,7 @@ docker-compose up --build
 docker ps
 docker exec -it <container_id> bash
 ```
-
+# Presentación
 ## Fase 1: Generación de Claves (RSA - Asimétrico)
 
 ### Pasos Realizados y Evidencia
@@ -117,3 +117,34 @@ key.txt -out aes_key_cifrada.bin
 <b>Lecciones aprendidas </b>
 
 Al trabajar con AES, aprendimos la importancia de usar claves seguras y cómo protegerlas mediante cifrado asimétrico con RSA. Vimos cómo generar una clave AES con OpenSSL, cifrar y descifrar archivos, y asegurar la clave AES utilizando una clave pública RSA con OAEP para mayor seguridad. También entendimos por qué comandos como rsautl están deprecados y cómo pkeyutl ofrece mejores prácticas criptográficas. Estos conceptos son esenciales para proteger datos en aplicaciones del mundo real.
+
+
+## Fase 4 - Hash y Firma Digital
+Esta fase se centra en:
+- Firmar el mensaje original con la clave privada del remitente.
+- Verificar la firma con la clave pública del remitente
+### Pasos realizados
+Se debe correr
+```
+openssl dgst -sha256 -out mensaje.hash mensaje.txt
+```
+Lo cuál ejecuta in `Digest` de `OpenSSL` con el algoritmo `SHA256` y guarda el resultado en `mensaje.hash` del archivo `mensaje.txt`.
+El resultado se puede observar en [mensaje_<NOMBRE>.hash](mensajes_hash/mensaje.hash).
+
+Luego, se debe correr:
+```
+openssl dgst -sha256 -sign mi_clave_privada.pem -out firma.bin mensaje.txt
+```
+Una vez más, se ejecuta `Digest` de `OpenSSL` con el algoritmo `SHA256`, pero esta vez se firma el archivo `mensaje.txt` con la clave privada del remitente y se guarda el resultado en `firma.bin`.
+
+Por último,
+```
+openssl dgst -sha256 -verify clave_publica_remitente.pem -signature firma.bin mensaje.txt
+```
+Se verifica la firma del mensaje con la clave pública del remitente.
+
+![Firma verificada](Firma%20verificada/Firma_Franz.png)
+
+### Lecciones aprendidas
+- __Firma Digital:__ La firma digital garantiza la autenticidad del remitente y la integridad del mensaje mediante el cifrado del hash con la clave privada.
+- __Verificación de la Firma:__ La verificación de la firma digital con la clave pública del remitente permite confirmar la autenticidad del mensaje y la integridad de los datos.
