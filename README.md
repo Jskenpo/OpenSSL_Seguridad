@@ -119,6 +119,51 @@ key.txt -out aes_key_cifrada.bin
 Al trabajar con AES, aprendimos la importancia de usar claves seguras y cómo protegerlas mediante cifrado asimétrico con RSA. Vimos cómo generar una clave AES con OpenSSL, cifrar y descifrar archivos, y asegurar la clave AES utilizando una clave pública RSA con OAEP para mayor seguridad. También entendimos por qué comandos como rsautl están deprecados y cómo pkeyutl ofrece mejores prácticas criptográficas. Estos conceptos son esenciales para proteger datos en aplicaciones del mundo real.
 
 
+## Fase 3 -- Verificación del Descifrado del Mensaje
+
+### Objetivo:
+Asegurarse de que los mensajes cifrados y las claves AES hayan sido descifrados correctamente por el **Usuario Final**.
+
+### Pasos:
+
+1. **Archivos necesarios**:
+   - `mensaje_cifrado_Manuel.bin`
+   - `aes_key_cifrada_Manuel.bin`
+   - `mi_clave_publica_Manuel.pem` (clave pública del remitente)
+
+2. **Verificar el descifrado de la clave AES**:
+   - El usuario final debe descifrar la clave AES con su clave privada:
+     ```bash
+     openssl rsautl -decrypt -inkey mi_clave_privada_Manuel.pem -in aes_key_cifrada_Manuel.bin -out aes_key_descifrada_Manuel.txt
+     ```
+   - **Resultado:** Se debe generar un archivo `aes_key_descifrada_Manuel.txt` que contenga la clave AES en texto plano.
+
+3. **Verificar el descifrado del mensaje:**
+   - El usuario debe descifrar el mensaje usando la clave AES descifrada:
+     ```bash
+     openssl enc -aes-256-cbc -d -in mensaje_cifrado_Manuel.bin -out mensaje_descifrado_Manuel.txt -pass file:aes_key_descifrada_Manuel.txt
+     ```
+   - **Resultado:** Se debe generar un archivo `mensaje_descifrado_Manuel.txt` con el contenido original del mensaje en texto plano.
+
+4. **Confirmación del mensaje**:
+   - Compara el archivo `mensaje_descifrado_Manuel.txt` con el mensaje original proporcionado por el remitente:
+     ```bash
+     diff mensaje_descifrado_Manuel.txt mensaje_Manuel.txt
+     ```
+   - **Resultado:**
+     - Si el comando no devuelve ninguna salida, significa que los archivos son idénticos y el descifrado fue exitoso.
+     - Si el comando muestra diferencias, hay un problema con el proceso de cifrado/descifrado.
+
+5. **Registro de la verificación**:
+   - Guarda el resultado de la verificación en un archivo:
+     ```bash
+     diff mensaje_descifrado_Manuel.txt mensaje_Manuel.txt > verificacion_descifrado_Manuel.log
+     ```
+   - **Resultado:** Un archivo de registro vacío si la verificación fue exitosa o con detalles de las diferencias si hubo algún error.
+
+
+
+
 ## Fase 4 - Hash y Firma Digital
 Esta fase se centra en:
 - Firmar el mensaje original con la clave privada del remitente.
