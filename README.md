@@ -148,3 +148,26 @@ Se verifica la firma del mensaje con la clave pública del remitente.
 ### Lecciones aprendidas
 - __Firma Digital:__ La firma digital garantiza la autenticidad del remitente y la integridad del mensaje mediante el cifrado del hash con la clave privada.
 - __Verificación de la Firma:__ La verificación de la firma digital con la clave pública del remitente permite confirmar la autenticidad del mensaje y la integridad de los datos.
+
+## Fase 5: Certificados Autofirmados (Simulación de PKI sin CA)
+Consiste en:
+- Generar el certificado.
+- Verificar el certificado.
+
+### Pasos realizados
+```
+openssl req -x509 -newkey rsa:2048 -keyout mi_certificado.key -out mi_certificado.crt -days 365 -nodes
+```
+Este comando genera un certificado SSL autofirmado con una clave privada RSA de 2048 bits. Guarda la clave en [mi_certificado_<NOMBRE>.key](certificados/mi_certificado_Sara.key) y el certificado en [mi_certificado_<NOMBRE>.crt](certificados/mi_certificado_Sara.crt), válido por 365 días. No protege la clave privada con contraseña (-nodes).
+
+Luego, se debe correr:
+```
+openssl x509 -in certificado_companero.crt -text -noout
+```
+Este comando muestra los detalles de un certificado SSL (mi_certificado_<NOMBRE>.crt) en formato legible. No modifica el archivo ni imprime su contenido codificado. Se hace esto con un certificado diferente al generado.
+
+![Certificado verificado](Certificados%20Verificados/Certificado_Ver_Sara.png)
+
+### Lecciones aprendidas
+- __Uso de certificados autofirmados:__  Permite simular una PKI sin una CA, útil para pruebas y redes internas.
+- __Verificación de certificados:__ openssl x509 -text -noout ayuda a inspeccionar y validar la configuración del certificado.
